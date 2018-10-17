@@ -1,5 +1,4 @@
 import React from "react";
-import Soundfont from 'soundfont-player';
 
 import { hexToRGB } from "../../utils/convertor";
 
@@ -65,12 +64,6 @@ class Grid extends React.Component {
       ]
     };
   }
-
-  playCorrespondingNode = (instrument, note) => {
-    Soundfont.instrument(new AudioContext(),instrument).then((instrument)=>{
-      instrument.play(note);
-    });    
-  };
   getInstrumentsNote = instrument => {
     return this.state.notes.map((item, index) => {
       return (
@@ -80,7 +73,6 @@ class Grid extends React.Component {
           style={{
             backgroundColor: hexToRGB(instrument.color,index/10 + 0.1)
           }}
-          onClick={() => this.playCorrespondingNode(instrument.name, item.note)}
         >
         {
           item.note
