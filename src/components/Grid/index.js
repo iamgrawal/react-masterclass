@@ -1,5 +1,5 @@
 import React from "react";
-import Soundfont from 'soundfont-player';
+import Soundfont from "soundfont-player";
 
 import { hexToRGB } from "../../utils/convertor";
 
@@ -62,29 +62,57 @@ class Grid extends React.Component {
           name: "electric_guitar_jazz",
           color: "#DAE1E7"
         }
-      ]
+      ],
+      midiGrid: {
+        acoustic_bass: [],
+        acoustic_guitar_steel: [],
+        shanai: [],
+        guitar_harmonics: [],
+        xylophone: [],
+        violin: [],
+        distortion_guitar: [],
+        sitar: [],
+        shamisen: [],
+        electric_guitar_jazz: []
+      }
     };
   }
 
-  playCorrespondingNode = (instrument, note) => {
-    Soundfont.instrument(new AudioContext(),instrument).then((instrument)=>{
-      instrument.play(note);
-    });    
+  playCorrespondingNode = (instrument, note, isCellActive) => {
+    const { midiGrid } = this.state;
+    if (!isCellActive) {
+      Soundfont.instrument(new AudioContext(), instrument).then(instrument => {
+        instrument.play(note);
+      });
+      midiGrid[instrument].push(note);
+    } else {
+      midiGrid[instrument].splice(note, 1);
+    }
+    this.setState({
+      midiGrid
+    });
   };
   getInstrumentsNote = instrument => {
     return this.state.notes.map((item, index) => {
+      const isCellActive = this.state.midiGrid[instrument.name].indexOf(
+        item.note
+      );
       return (
         <div
-          className="cell active"
+          className={`cell ${isCellActive > -1 ? `active` : ``}`}
           key={`Item${item.note}`}
           style={{
-            backgroundColor: hexToRGB(instrument.color,index/10 + 0.1)
+            backgroundColor: hexToRGB(instrument.color, index / 10 + 0.1)
           }}
-          onClick={() => this.playCorrespondingNode(instrument.name, item.note)}
+          onClick={() =>
+            this.playCorrespondingNode(
+              instrument.name,
+              item.note,
+              isCellActive > -1
+            )
+          }
         >
-        {
-          item.note
-        }
+          {item.note}
         </div>
       );
     });

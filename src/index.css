@@ -44,6 +44,9 @@ body{
 .matrix .cell:hover{
   opacity: 0.6;
 }
+.active{
+  box-shadow: inset 0px 0px 20px 10px rgba(0, 0, 0, 0.6)
+}
 .matrix .cell:active{
   opacity: 1;
 }
