@@ -64,6 +64,11 @@ class Grid extends React.Component {
       ]
     };
   }
+
+  /**
+   * gets notes for each instruments and displays it in the table
+   * @param {object} instrument
+   */
   getInstrumentsNote = instrument => {
     return this.state.notes.map((item, index) => {
       return (
@@ -81,6 +86,7 @@ class Grid extends React.Component {
       );
     });
   };
+
   render() {
     return (
       <div className="matrix">

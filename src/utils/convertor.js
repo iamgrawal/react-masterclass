@@ -1,3 +1,8 @@
+/**
+ * Function to convert hexa into rbg/rbga format 
+ * @param {string} hex 
+ * @param {string} alpha 
+ */
 export const hexToRGB=(hex, alpha)=> {
     var r = parseInt(hex.slice(1, 3), 16),
         g = parseInt(hex.slice(3, 5), 16),
