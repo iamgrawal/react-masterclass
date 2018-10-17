@@ -2,83 +2,57 @@ import React from "react";
 import Soundfont from 'soundfont-player';
 
 import { hexToRGB } from "../../utils/convertor";
+import { notes, instruments } from "../../utils/keys";
 
 class Grid extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      notes: [
-        { note: "C4" },
-        { note: "C#4" },
-        { note: "D4" },
-        { note: "D#4" },
-        { note: "E4" },
-        { note: "F4" },
-        { note: "F#4" },
-        { note: "G4" },
-        { note: "G#4" },
-        { note: "A4" },
-        { note: "A#4" },
-        { note: "B4" }
-      ],
-      instruments: [
-        {
-          name: "acoustic_bass",
-          color: "#EF5753"
-        },
-        {
-          name: "acoustic_guitar_steel",
-          color: "#FAAD63"
-        },
-        {
-          name: "shanai",
-          color: "#FFF382"
-        },
-        {
-          name: "guitar_harmonics",
-          color: "#51D88A"
-        },
-        {
-          name: "xylophone",
-          color: "#64D5CA"
-        },
-        {
-          name: "violin",
-          color: "#6CB2EB"
-        },
-        {
-          name: "distortion_guitar",
-          color: "#7886D7"
-        },
-        {
-          name: "sitar",
-          color: "#A779E9"
-        },
-        {
-          name: "shamisen",
-          color: "#FA7EA8"
-        },
-        {
-          name: "electric_guitar_jazz",
-          color: "#DAE1E7"
-        }
-      ]
+      active: {
+        acoustic_bass: [],
+        acoustic_guitar_steel: [],
+        shanai: [],
+        guitar_harmonics: [],
+        xylophone: [],
+        violin: [],
+        distortion_guitar: [],
+        sitar: [],
+        shamisen:[],
+        electric_guitar_jazz: []
+      }
     };
   }
 
+  /**
+   * plays the corresponding sound of the instrument node
+   * @param {string} instrument
+   * @param {string} note
+   */
   playCorrespondingNode = (instrument, note) => {
-    Soundfont.instrument(new AudioContext(),instrument).then((instrument)=>{
-      instrument.play(note);
-    });    
+    var activeNotes = this.state.active;
+    if(!activeNotes[instrument].includes(note)){
+      activeNotes[instrument].push(note);
+      Soundfont.instrument(new AudioContext(),instrument).then((instrument)=>{
+        instrument.play(note);
+      });
+    }
+    else
+      activeNotes[instrument].pop(note);
+    this.setState({active: activeNotes});    
   };
+
+  /**
+   * gets notes for each instruments and displays it in the table
+   * @param {object} instrument
+   */
   getInstrumentsNote = instrument => {
-    return this.state.notes.map((item, index) => {
+    return notes.map((item, index) => {
       return (
         <div
-          className="cell active"
+          className= {this.state.active[instrument.name].includes(item.note) ? "cell active" : "cell"}
           key={`Item${item.note}`}
           style={{
-            backgroundColor: hexToRGB(instrument.color,index/10 + 0.1)
+            backgroundColor: hexToRGB(instrument.color,index/10 + 0.2)
           }}
           onClick={() => this.playCorrespondingNode(instrument.name, item.note)}
         >
@@ -89,11 +63,12 @@ class Grid extends React.Component {
       );
     });
   };
+
   render() {
     return (
       <div className="matrix">
         <div className="row">
-          {this.state.instruments.map(item => {
+          {instruments.map(item => {
             return (
               <div className="row" key={item.color}>
                 {this.getInstrumentsNote(item)}
