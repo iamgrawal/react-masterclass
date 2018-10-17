@@ -1,7 +1,7 @@
 # React Masterclass
 
 * Organised by [**GitAll**](https://gitall.tech).
-* This is the project for the react-masterclass that was organised on 21<sup>st</sup> Octiber, 2018. A codelab in which students were taught **React + Sockets + MIDI**. 
+* This is the project for the react-masterclass that was organised on 21<sup>st</sup> October, 2018. A codelab in which students were taught **React + Sockets + MIDI**. 
 * This project was bootstrapped from create-react-app.
 
 ## Mentors
