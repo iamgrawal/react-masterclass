@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-import { instruments } from "../utils/keys";
+import { instruments } from "../utils/layoutConfig";
 
 import Grid from "./Grid";
 class App extends Component {

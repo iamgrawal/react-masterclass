@@ -63,6 +63,8 @@ body{
   opacity: 0.6;
 }
 .matrix .cell.active{
-  opacity: 1;
   box-shadow: inset 0px 0px 20px 1.5px rgba(0,0,0,0.5);
+}
+.matrix .cell:active{
+  opacity: 1;
 }
