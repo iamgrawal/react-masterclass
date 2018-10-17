@@ -1,6 +1,6 @@
 import React from "react";
 import Soundfont from "soundfont-player";
-
+import { socket } from "../../utils/socketClient";
 import { hexToRGB } from "../../utils/convertor";
 import { instruments, notes } from "../../utils/layoutConfig";
 class Grid extends React.Component {
@@ -21,19 +21,31 @@ class Grid extends React.Component {
       }
     };
   }
-
-  playCorrespondingNode = (instrument, note, isCellActive) => {
+  toggleGridCell = (instrument, note) => {
     const { midiGrid } = this.state;
+    if (midiGrid[instrument].indexOf(note) > -1) {
+      midiGrid[instrument].splice(note, 1);
+    } else {
+      midiGrid[instrument].push(note);
+    }
+    this.setState({
+      midiGrid
+    });
+  };
+  componentDidMount() {
+    socket.on("notePlayed", data => {
+      this.toggleGridCell(data.instrument,data.note)
+    });
+  }
+  playCorrespondingNode = (instrument, note, isCellActive) => {
     if (!isCellActive) {
       Soundfont.instrument(new AudioContext(), instrument).then(instrument => {
         instrument.play(note);
       });
-      midiGrid[instrument].push(note);
-    } else {
-      midiGrid[instrument].splice(note, 1);
     }
-    this.setState({
-      midiGrid
+    socket.emit("notePlayed", {
+      instrument: instrument,
+      note: note,
     });
   };
   getInstrumentsNote = instrument => {
