@@ -53,4 +53,4 @@ export const notes= [
     { note: "A4" },
     { note: "A#4" },
     { note: "B4" }
-  ];Î
+  ];

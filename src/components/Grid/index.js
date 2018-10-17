@@ -37,7 +37,7 @@ class Grid extends React.Component {
     });
   };
   getInstrumentsNote = instrument => {
-    return this.state.notes.map((item, index) => {
+    return notes.map((item, index) => {
       const isCellActive = this.state.midiGrid[instrument.name].indexOf(
         item.note
       );
@@ -65,7 +65,7 @@ class Grid extends React.Component {
     return (
       <div className="matrix">
         <div className="row">
-          {this.state.instruments.map(item => {
+          {instruments.map(item => {
             return (
               <div className="row" key={item.color}>
                 {this.getInstrumentsNote(item)}
