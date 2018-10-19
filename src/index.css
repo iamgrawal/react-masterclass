@@ -13,13 +13,34 @@ body{
   font-size: 3rem;
   font-family:  monospace;
 }
-
 .button-group button{
   height: 40px;
   font-family: monospace;
   font-size: 1.5em;
   width: 150px;
 }
+.music-container {
+  display: inline-flex;
+}
+.instruments-list {
+  list-style: none;
+  color: white;
+  width: 10rem;
+  margin: 0;
+  padding: 0;
+}
+.instruments-list li {
+  height: 3.125rem;
+  width: 100%;
+  margin: 0;
+  padding: 0px 0px;
+  text-align: center;
+  text-transform: capitalize;
+}
+.button-group button{
+  cursor: pointer;
+}
+
 /* grid.js styling*/
 .matrix{
   height: 30rem;
@@ -44,8 +65,8 @@ body{
 .matrix .cell:hover{
   opacity: 0.6;
 }
-.active{
-  box-shadow: inset 0px 0px 20px 10px rgba(0, 0, 0, 0.6)
+.matrix .cell.active{
+  box-shadow: inset 0px 0px 20px 1.5px rgba(0,0,0,0.5);
 }
 .matrix .cell:active{
   opacity: 1;
