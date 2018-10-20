@@ -9,6 +9,9 @@ class App extends Component {
       <li key={instrument.name}>{instrument.name.replace(/_/g, " ")}</li>
     ));
   };
+  handlePlayButton = () => {};
+  handlePauseButton = () => {};
+  handleStopButton = () => {};
   render() {
     return (
       <div className="App">
@@ -18,9 +21,9 @@ class App extends Component {
           <Grid />
         </div>
         <div className="button-group">
-          <button>Play</button>
-          <button>Stop</button>
-          <button>Pause</button>
+          <button onClick={this.handlePlayButton}>Play</button>
+          <button onClick={this.handlePauseButton}>Stop</button>
+          <button onClick={this.handleStopButton}>Pause</button>
         </div>
       </div>
     );
