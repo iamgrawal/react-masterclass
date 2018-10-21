@@ -1,3 +1,4 @@
+import Soundfont from 'soundfont-player';
 export const notes = [
   { note: "C4" },
   { note: "C#4" },
@@ -54,3 +55,14 @@ export const instruments = [
     color: "#DAE1E7"
   }
 ];
+
+export const soundFonts = () => {
+  let slf=[];
+  instruments.map(async item => {
+    let instrument = await Soundfont.instrument(
+      new AudioContext(),
+      item.name
+    );
+    slf.push(instrument);
+  });
+};

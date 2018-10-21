@@ -2,90 +2,64 @@ import React from "react";
 import Soundfont from "soundfont-player";
 import { socket } from "../../utils/socketClient";
 import { hexToRGB } from "../../utils/convertor";
-import { notes, instruments } from "../../utils/layoutConfig";
+import { notes, instruments, soundFonts } from "../../utils/layoutConfig";
 class Grid extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      midiGrid: {
-        acoustic_bass: [],
-        acoustic_guitar_steel: [],
-        shanai: [],
-        guitar_harmonics: [],
-        xylophone: [],
-        violin: [],
-        distortion_guitar: [],
-        sitar: [],
-        shamisen:[],
-        electric_guitar_jazz: []
-      }
-    };
+    this.soundfont = [];
   }
-
-  toggleGridCell = (instrument, note) => {
-    const { midiGrid } = this.state;
-    if (midiGrid[instrument].indexOf(note) > -1) {
-      midiGrid[instrument].splice(midiGrid[instrument].indexOf(note), 1);
-    } else {
-      midiGrid[instrument].push(note);
-    }
-    this.setState({
-      midiGrid
-    });
-  };
   componentDidMount() {
     socket.on("notePlayed", data => {
-      this.toggleGridCell(data.instrument,data.note)
+      this.props.midiContainer.toggleGridCell(data.instrument, data.note);
     });
+    // this.loadSoundFont();
   }
-  playCorrespondingNode = (instrument, note, isCellActive) => {
-    if (!isCellActive) {
-      Soundfont.instrument(new AudioContext(), instrument).then(instrument => {
-        instrument.play(note);
-      });
-    }
-    socket.emit("notePlayed", {
-      instrument: instrument,
-      note: note,
-    });
-  };
-
 
   /**
    * plays the corresponding sound of the instrument node
    * @param {string} instrument
    * @param {string} note
    */
-  playCorrespondingNode = (instrument, note, isCellActive) => {
-    if(!isCellActive){
-      Soundfont.instrument(new AudioContext(),instrument).then((instrument)=>{
-        instrument.play(note);
-      });
+  playCorrespondingNode = (instrument, note, isCellActive, index) => {
+    if (!isCellActive) {
+      console.log(soundFonts);
+      soundFonts[index].play(note);
     }
-    this.toggleGridCell(instrument, note);    
+    socket.emit("notePlayed", {
+      instrument: instrument,
+      note: note
+    });
   };
+  // playCorrespondingNode = (instrument, note, isCellActive) => {
+  //   if (!isCellActive) {
+  //     Soundfont.instrument(new AudioContext(), instrument).then(instrument => {
+  //       instrument.play(note);
+  //     });
+  //   }
+  //   this.toggleGridCell(instrument, note);
+  // };
 
   /**
    * gets notes for each instruments and displays it in the table
    * @param {object} instrument
    */
-  getInstrumentsNote = instrument => {
+  getInstrumentsNote = (instrument, idx) => {
+    const { midiContainer } = this.props;
     return notes.map((item, index) => {
-      const isCellActive = this.state.midiGrid[instrument.name].indexOf(
-        item.note
-      );
+      const isCellActive = midiContainer.state.midiGrid[instrument.name].indexOf(item.note);
       return (
         <div
-          className= {`cell ${isCellActive > -1 ? `active` : ``}`}
+          className={`cell ${isCellActive > -1 ? `active` : ``}`}
           key={`Item${item.note}`}
           style={{
-            backgroundColor: hexToRGB(instrument.color,index/10 + 0.2)
+            backgroundColor: hexToRGB(instrument.color, index / 10 + 0.2)
           }}
           onClick={() =>
             this.playCorrespondingNode(
-              instrument.name,
+              instrument,
               item.note,
-              isCellActive > -1
+              isCellActive > -1,
+              idx
             )
           }
         >
@@ -99,10 +73,10 @@ class Grid extends React.Component {
     return (
       <div className="matrix">
         <div className="row">
-          {instruments.map(item => {
+          {instruments.map((item, index) => {
             return (
               <div className="row" key={item.color}>
-                {this.getInstrumentsNote(item)}
+                {this.getInstrumentsNote(item, index)}
               </div>
             );
           })}
