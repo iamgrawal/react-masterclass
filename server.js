@@ -2,8 +2,9 @@ var server = require('http').createServer();
 var io = require('socket.io')(server);
 io.on('connection',function(socket){
     socket.join('midiMix');
+    console.log('user connected');
     socket.on('notePlayed',function(data){
-        console.log(data);
+        console.log('notePasses');
         io.to('midiMix').emit('notePlayed',data);
     });
 }); 

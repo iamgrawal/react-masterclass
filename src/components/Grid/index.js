@@ -32,12 +32,19 @@ class Grid extends React.Component {
     this.setState({
       midiGrid
     });
-  };
+  }
   componentDidMount() {
     socket.on("notePlayed", data => {
+      console.log('note palyer');
       this.toggleGridCell(data.instrument,data.note)
     });
   }
+
+  /**
+   * plays the corresponding sound of the instrument node
+   * @param {string} instrument
+   * @param {string} note
+   */
   playCorrespondingNode = (instrument, note, isCellActive) => {
     if (!isCellActive) {
       Soundfont.instrument(new AudioContext(), instrument).then(instrument => {
@@ -48,21 +55,6 @@ class Grid extends React.Component {
       instrument: instrument,
       note: note,
     });
-  };
-
-
-  /**
-   * plays the corresponding sound of the instrument node
-   * @param {string} instrument
-   * @param {string} note
-   */
-  playCorrespondingNode = (instrument, note, isCellActive) => {
-    if(!isCellActive){
-      Soundfont.instrument(new AudioContext(),instrument).then((instrument)=>{
-        instrument.play(note);
-      });
-    }
-    this.toggleGridCell(instrument, note);    
   };
 
   /**
