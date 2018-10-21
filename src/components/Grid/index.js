@@ -1,7 +1,7 @@
 import React from "react";
-import Soundfont from "soundfont-player";
 import { socket } from "../../utils/socketClient";
 import { hexToRGB } from "../../utils/convertor";
+import Soundfont from "soundfont-player";
 import { notes, instruments, soundFonts } from "../../utils/layoutConfig";
 class Grid extends React.Component {
   constructor(props) {
@@ -12,7 +12,6 @@ class Grid extends React.Component {
     socket.on("notePlayed", data => {
       this.props.midiContainer.toggleGridCell(data.instrument, data.note);
     });
-    // this.loadSoundFont();
   }
 
   /**
@@ -22,22 +21,16 @@ class Grid extends React.Component {
    */
   playCorrespondingNode = (instrument, note, isCellActive, index) => {
     if (!isCellActive) {
-      console.log(soundFonts);
-      soundFonts[index].play(note);
+      Soundfont.instrument(new AudioContext(), instrument.name).then(ins => {
+        ins.play(note);
+      });
+      // soundFonts[index].play(note);
     }
     socket.emit("notePlayed", {
       instrument: instrument,
       note: note
     });
   };
-  // playCorrespondingNode = (instrument, note, isCellActive) => {
-  //   if (!isCellActive) {
-  //     Soundfont.instrument(new AudioContext(), instrument).then(instrument => {
-  //       instrument.play(note);
-  //     });
-  //   }
-  //   this.toggleGridCell(instrument, note);
-  // };
 
   /**
    * gets notes for each instruments and displays it in the table
@@ -46,7 +39,9 @@ class Grid extends React.Component {
   getInstrumentsNote = (instrument, idx) => {
     const { midiContainer } = this.props;
     return notes.map((item, index) => {
-      const isCellActive = midiContainer.state.midiGrid[instrument.name].indexOf(item.note);
+      const isCellActive = midiContainer.state.midiGrid[
+        instrument.name
+      ].indexOf(item.note);
       return (
         <div
           className={`cell ${isCellActive > -1 ? `active` : ``}`}

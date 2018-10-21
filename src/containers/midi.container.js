@@ -1,4 +1,5 @@
 import { Container } from "unstated";
+import Soundfont from "soundfont-player";
 import { soundFonts } from "../utils/layoutConfig";
 export default class MidiContainer extends Container {
   state = {
@@ -18,7 +19,7 @@ export default class MidiContainer extends Container {
   toggleGridCell = (instrument, note) => {
     const { midiGrid } = this.state;
     if (midiGrid[instrument.name].indexOf(note) > -1) {
-      midiGrid[instrument.name].splice(midiGrid[instrument].indexOf(note), 1);
+      midiGrid[instrument.name].splice(midiGrid[instrument.name].indexOf(note), 1);
     } else {
       midiGrid[instrument.name].push(note);
     }
@@ -27,10 +28,12 @@ export default class MidiContainer extends Container {
     });
   };
   playMidi = () => {
+    let ac = new AudioContext();
     Object.keys(this.state.midiGrid).map((item, index) => {
-        this.state.midiGrid[item].map((item)=>{
-            console.log(index, item);
-            //soundFonts[index].play(item);
+        this.state.midiGrid[item].map((note)=>{
+            Soundfont.instrument(ac, item).then((ins)=>{
+                ins.play(note);
+            })
         })
     });
   };
