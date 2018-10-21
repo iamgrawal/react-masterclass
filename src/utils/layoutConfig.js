@@ -1,4 +1,4 @@
-import Soundfont from 'soundfont-player';
+import Soundfont from "soundfont-player";
 export const notes = [
   { note: "C4" },
   { note: "C#4" },
@@ -56,13 +56,13 @@ export const instruments = [
   }
 ];
 
-export const soundFonts = () => {
-  let slf=[];
+const loadSoundFonts = () => {
+  let slf = [];
+  let ac = new AudioContext();
   instruments.map(async item => {
-    let instrument = await Soundfont.instrument(
-      new AudioContext(),
-      item.name
-    );
+    let instrument = await Soundfont.instrument(ac, item.name);
     slf.push(instrument);
   });
+  return slf;
 };
+export const soundFonts = loadSoundFonts();

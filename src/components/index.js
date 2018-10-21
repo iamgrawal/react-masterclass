@@ -26,8 +26,6 @@ class App extends Component {
         </div>
         <div className="button-group">
           <button onClick={midiContainer.playMidi}>Play</button>
-          <button onClick={midiContainer.stopMidi}>Stop</button>
-          <button onClick={this.handleStopButton}>Pause</button>
         </div>
       </div>
     );
